@@ -21,6 +21,12 @@
                 <div class="blob b4"></div>
             </div>
 
+            <div class="svg-container">
+                <svg width="1364" height="3007" viewBox="0 0 1364 3007" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M679.33 35.0095C679.33 35.0095 139.982 224.929 66.8304 521.51C-52.6641 1005.98 1400.33 1230.01 1321.83 761.51C1243.33 293.01 -36.687 946.031 66.8304 1506.51C161.697 2020.15 1183.63 1290.01 1321.83 1969.01C1435.73 2528.59 102.83 3031.51 36.8304 2515.01C-21.8857 2055.51 1321.83 2971.51 1321.83 2971.51" stroke="white" stroke-width="70" stroke-linecap="round"/>
+                </svg>
+            </div>
+
             <!-- hero -->
             <section id="hero" class="section hero-section">
                 <div class="hero-content">
@@ -33,24 +39,41 @@ and machine learning.</p>
             </section>
 
             <!-- about -->
-            <section class="section about-section dark-section">
+            <section id="aboutPart" class="section about-section">
                 <div class="about-transition">
                     <div class="shape"></div>
-                    </div>
                 </div>
 
-                <div class="about-content">
-                    <h2 class="about-title">ABOUT ME</h2>
-                <p class="about-para">I am a software developer with a passion for creating 
-         innovative solutions. With experience in web development and machine learning, I enjoy tackling complex problems
-and delivering high-quality results.</p>
+                
+
+                <div class="about-container">
+                    <section class="about-hero">
+                        ><div class="about-texts">
+                            <h2 id="about-heading" class="about-title">ABOUT ME</h2>
+                            <div class="about-para">
+                                <p class="aboutPara">I am a full-stack web developer building on a strong foundation in frontend engineering. I specialize in Next.js, TypeScript, and Tailwind CSS, creating responsive, maintainable interfaces with reusable components and smooth user experiences. I focus on clean layouts, visual hierarchy, and accessibility to deliver polished designs.</p>
+                                <p class="aboutPara">On the backend, I work with Node.js, Stack Auth, and Prisma ORM, connecting applications to serverless databases via Neon Console. I handle authentication, data modeling, schema management, and queries, creating integrated systems where UI and data flow seamlessly. I troubleshoot real-world issues, from environment configuration to library updates, ensuring functional and scalable solutions.</p>
+                                <p class="aboutPara">My projects reflect this growth from frontend interfaces to complete full-stack applications like dashboards and ecommerce sites. I approach development with clear architecture, consistent styling, and attention to detail, building systems that are both practical and professionally engineered.</p>
+                            </div>
+                        </div>
+
+                        <div class="marquee">
+                            <div class="marquee-track">
+                                <div class="marquee-items"><img src="images/img1.jpg"/></div>
+                                <div class="marquee-items"><img src="images/img2.jpg"/></div>
+                                <div class="marquee-items"><img src="images/img3.jpg"/></div>
+                                <div class="marquee-items"><img src="images/img4.jpg"/></div>
+                                <div class="marquee-items"><img src="images/img5.jpg"/></div>
+                                <div class="marquee-items"><img src="images/img6.jpg"/></div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </section>
         </div>
     </div>
 
-
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>

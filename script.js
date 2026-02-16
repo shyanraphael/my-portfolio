@@ -1,88 +1,21 @@
-// Using CDN-built globals (gsap, ScrollTrigger, Lenis). Removed ES module imports
-// so this file can run directly in the browser without a bundler.
-
-// Register ScrollTrigger if available
-if (window.gsap && window.ScrollTrigger) {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-  // ---------- LENIS + GSAP LINK ----------
-  const lenis = window.Lenis ? new Lenis({ duration: 1.2, smoothWheel: true }) : null;
+  
+  gsap.registerPlugin(ScrollTrigger);
 
-  if (lenis && window.ScrollTrigger) {
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((t) => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
-  }
+  // ---------------- LENIS ----------------
+  ScrollTrigger.refresh();
 
-  // ---------- ABOUT SCENE TRANSITION ----------
-  const aboutSection = document.querySelector(".about-section");
-  const shape = document.querySelector(".shape");
-  const aboutContent = document.querySelector(".about-content");
+  const lenis = new Lenis();
 
-  // Initial state: offscreen bottom
-  gsap.set(shape, { 
-    rotate: 0, 
-    borderRadius: "0%", 
-    y: "150vh", // start way below viewport
-    scale: 1
+  lenis.on("scroll", ScrollTrigger.update);
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
   });
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutSection,
-      start: "top top",
-      end: "+=150%",
-      scrub: true,
-      pin: true,
-    }
-  });
-
-  // Step 1 — move shape from bottom to center while rotating
-  tl.to(".shape", {
-    y: "-50vh",             // moves from below to center
-    rotate: 360,
-    duration: 1,
-    ease: "power2.inOut",
-    transformOrigin: "50% 50%"
-  })
-
-  // Step 2 — square becomes circle
-  .to(".shape", {
-    borderRadius: "50%",
-    duration: 0.6,
-    ease: "power2.inOut"
-  })
-
-  // Step 3 — circle zooms to fill screen (black takeover)
-  .to(".shape", {
-    scale: 40,
-    duration: 1.2,
-    ease: "power4.inOut",
-    transformOrigin: "50% 50%"
-  })
-
-  // Step 4 — fade yellow layer
-  .to(".about-transition", {
-    opacity: 0,
-    duration: 0.4
-  })
-
-  // Step 5 — reveal about content
-  .to(".about-content", {
-    opacity: 1,
-    duration: 0.6
-  });
-
-
-
-
-  // ---------- TALK BUTTON ----------
+  //button anime
   const talkButton = document.querySelector(".talkButton");
   const arrowIcon = document.querySelector(".talkButton .fa-arrow-right");
-  //ABOUT SECTION
-  
 
   if (talkButton && arrowIcon) {
     const stretchedPath =
@@ -94,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
       duration: 0.4,
       clipPath: stretchedPath,
       backgroundColor: "#f9ff82",
-      ease: "power2.inOut",
       color: "#0a0a0a",
+      ease: "power2.inOut",
     }).to(
       arrowIcon,
       {
@@ -110,113 +43,217 @@ document.addEventListener("DOMContentLoaded", () => {
     talkButton.addEventListener("mouseleave", () => tl.reverse());
   }
 
-  // ---------- HERO TEXT (simple SplitText fallback) ----------
-  const heroSub = document.querySelector(".hero-subtitle");
-
-  if (heroSub) {
-    // Simple fallback to split characters into spans (no SplitText plugin required)
-    const text = heroSub.textContent.trim();
-    heroSub.textContent = "";
-    const fragment = document.createDocumentFragment();
-
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i];
-      const span = document.createElement("span");
-      span.className = "char";
-      span.textContent = ch === " " ? "\u00A0" : ch;
-      fragment.appendChild(span);
-    }
-
-    heroSub.appendChild(fragment);
-
-    const chars = heroSub.querySelectorAll(".char");
-
-    gsap.from(chars, {
-      yPercent: () => gsap.utils.random(-100, 100),
-      rotation: () => gsap.utils.random(-30, 30),
-      autoAlpha: 0,
-      ease: "back.out(1.7)",
-      stagger: { amount: 0.5, from: "random" },
-    });
-  }
-
-  //A-Z loop about
-  const aboutPara = document.querySelector(".about-para");
-  if (aboutPara) {
-    const originalText = aboutPara.textContent.trim();
-    aboutPara.textContent = "";
-
-    const frag = document.createDocumentFragment();
-
-    for (let ch of originalText) {
-      const span = document.createElement("span");
-      span.className = "char";
-      span.textContent = ch === " " ? "\u00A0" : ch;
-      frag.appendChild(span);
-    }
-
-    aboutPara.appendChild(frag);
-
-    const letters = aboutPara.querySelectorAll(".char");
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    letters.forEach((letter) => {
-      const finalChar = letter.textContent.toUpperCase();
-
-      // Skip spaces and non-letters
-      if (!alphabet.includes(finalChar)) return;
-
-      letter.addEventListener("mouseenter", () => {
-        let index = 0;
-
-        gsap.to({}, {
-          duration: 0.8,
-          ease: "none",
-          onUpdate: function () {
-            letter.textContent = alphabet[index % 26];
-            index++;
-          },
-          onComplete: function () {
-            letter.textContent = finalChar;
-          }
-        });
-      });
-    });
-  }
-
+  //navbar
   function loadNavbar() {
     const placeholder = document.getElementById("navbar-placeholder");
     if (!placeholder) return;
 
     fetch("navbar.html")
-      .then((res) => res.text())
-      .then((html) => {
+      .then(res => res.text())
+      .then(html => {
         placeholder.innerHTML = html;
 
-        // NOW navbar exists
-        initNavbarThemeSwitch();
-      })
-      .catch((err) => console.error("Navbar load failed:", err));
+        const aboutLink = document.querySelector(".about-link");
+
+        aboutLink.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          const aboutSection = document.querySelector("#about");
+
+          if (aboutSection) {
+            lenis.scrollTo(aboutSection.offsetTop + 200);
+          }
+
+          const heading = document.querySelector("#about-heading");
+
+          if (heading) {
+            lenis.scrollTo(heading);
+          }
+
+        });
+
+
+        // Attach smooth scroll after navbar is inserted
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute("href"));
+            if (target) {
+              lenis.scrollTo(target);
+            }
+          });
+        });
+
+
+        const navbar = document.querySelector(".nav-header");
+        if (!navbar) return;
+
+        ScrollTrigger.create({
+          trigger: ".about-section",
+          start: "top 50px",
+          end: "bottom top",
+          onEnter: () => navbar.classList.add("nav-dark"),
+          onLeave: () => navbar.classList.remove("nav-dark"),
+          onEnterBack: () => navbar.classList.add("nav-dark"),
+          onLeaveBack: () => navbar.classList.remove("nav-dark"),
+          refreshPriority: -1
+        });
+
+        ScrollTrigger.refresh();
+      });
   }
 
-    loadNavbar();
+  loadNavbar();
 
 
-  // ---------- NAVBAR COLOR SWITCH ----------
-  function initNavbarThemeSwitch() {
-    const navbar = document.querySelector(".nav-header");
-    const darkSections = document.querySelectorAll(".dark-section");
 
-    darkSections.forEach((section) => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top+=90",
-        end: "bottom top+=90",
-        onEnter: () => navbar.classList.add("nav-light"),
-        onEnterBack: () => navbar.classList.add("nav-light"),
-        onLeave: () => navbar.classList.remove("nav-light"),
-        onLeaveBack: () => navbar.classList.remove("nav-light"),
-      });
+  // ---------------- HERO A-Z RANDOM ANIMATION ----------------
+  const heroSub = document.querySelector(".hero-subtitle");
+
+  if (heroSub) {
+    const text = heroSub.textContent.trim();
+    heroSub.textContent = "";
+
+    [...text].forEach(aboutChar => {
+      const span = document.createElement("span");
+      span.className = "aboutChar";
+      span.textContent = aboutChar === " " ? "\u00A0" : aboutChar;
+      heroSub.appendChild(span);
+    });
+
+    gsap.from(".aboutChar", {
+      yPercent: () => gsap.utils.random(-120, 120),
+      rotation: () => gsap.utils.random(-40, 40),
+      autoAlpha: 0,
+      stagger: { amount: 0.6, from: "random" },
+      ease: "back.out(1.7)",
     });
   }
+
+  // ---------------- ABOUT SHAPE ANIMATION ----------------
+  const aboutSection = document.querySelector(".about-section");
+  const shape = document.querySelector(".shape");
+  const aboutTransition = document.querySelector(".about-transition");
+
+  const aboutTL = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".about-section",
+      start: "top top",
+      end: "+=150%",
+      scrub: true,
+      pin: true,
+    },
+  });
+
+  aboutTL
+    // square rises to center
+    .to(".shape", {
+      y: "-50vh",
+      rotate: 360,
+      ease: "power2.inOut",
+    })
+    // square → circle
+    .to(".shape", {
+      borderRadius: "50%",
+      duration: 0.6,
+      ease: "power2.inOut",
+    })
+    // circle → zoom to full screen
+    .to(".shape", {
+      scale: 40,
+      ease: "power4.inOut",
+      transformOrigin: "50% 50%",
+    })
+    // remove yellow so black is visible
+    .to(".about-transition", {
+      opacity: 0,
+      duration: 0.1,
+    });
+
+
+
+  // ---------------- MARQUEE ----------------
+  const marqueeTrack = document.querySelector(".marquee-track");
+  const items = document.querySelectorAll(".marquee-items");
+
+  items.forEach(item => {
+    marqueeTrack.appendChild(item.cloneNode(true));
+  });
+
+  let pos = 0;
+
+  gsap.ticker.add(() => {
+    pos -= 0.5;
+    if (Math.abs(pos) >= marqueeTrack.scrollWidth / 5) pos = 0;
+    gsap.set(marqueeTrack, { x: pos });
+  });
+
+  //A to Z
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  document.querySelectorAll(".about-para p").forEach(p => {
+    const words = p.innerText.split(" ");
+
+    p.innerHTML = words
+      .map(w => `<span class="word">${w}</span>`)
+      .join(" ");
+
+    p.querySelectorAll(".word").forEach(word => {
+      const original = word.textContent;
+
+      // 🔥 lock width once
+      const width = word.offsetWidth;
+      word.style.width = width + "px";
+      word.style.display = "inline-block";
+      word.style.whiteSpace = "nowrap";
+
+      word.addEventListener("mouseenter", () => {
+        let progressObj = { progress: 0 };
+
+        gsap.to(progressObj, {
+          progress: original.length,
+          duration: 0.6,
+          ease: "none",
+          onUpdate: () => {
+            const progress = Math.floor(progressObj.progress);
+
+            word.textContent = original
+              .split("")
+              .map((letter, index) => {
+                if (index < progress) return original[index];
+                return alphabet[Math.floor(Math.random() * 26)];
+              })
+              .join("");
+          },
+          onComplete: () => {
+            word.textContent = original;
+          }
+        });
+      });
+    });
+  });
+
+  //svg part
+  let svg = document.querySelector("svg");
+  let path = svg.querySelector("path");
+  const pathLength = path.getTotalLength();
+
+  console.log(pathLength);
+
+  gsap.set(path, { strokeDasharray: pathLength });
+
+  gsap.fromTo(path,
+    { strokeDashoffset: pathLength },
+    {
+      strokeDashoffset: 0,
+      duration: 10,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".svg-container",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1,
+      }
+    }
+  );
 });
