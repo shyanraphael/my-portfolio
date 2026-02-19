@@ -138,16 +138,38 @@ body {
 /*BLOB END*/
 
 /*SVG*/
+/* --- 3D FLUX BACKGROUND --- */
+.flux-container {
+    position: fixed; /* Sticks to screen while scrolling */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Behind everything */
+    overflow: hidden;
+    background: #0a0a0a; /* Ensure bg is dark */
+    pointer-events: none; /* Clicks pass through */
+}
+
+.flux-svg {
+    width: 150%; /* Make it bigger than screen to hide edges */
+    height: 150%;
+    position: absolute;
+    top: -25%;
+    left: -25%;
+    /* The Magic Rotate: Corner to Corner */
+    transform: rotate(-30deg) skewX(-10deg); 
+}
 .svg-container{
     position: absolute;
-    top: 0;
+    top: 1rem;
     left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 3007px;
-    z-index: 50;
+    height: 4826;
+    z-index: 1;
     pointer-events: none;
 }
 
@@ -162,7 +184,7 @@ svg{
     width: 4rem;
     height: 2rem;
     background: transparent;
-    border: 2px solid var(--primary-color);
+    border: 2px solid white;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     border-bottom-right-radius: 50px;
@@ -180,7 +202,7 @@ svg{
     top: 0;
     width: 100%;
     height: 100%;
-    background: var(--primary-color);
+    background: #f9ff82;
     transform-origin: left;
     transform: scaleX(0);
     transition: transform 0.35s cubic-bezier(.2,.9,.2,1);
@@ -205,11 +227,29 @@ svg{
     gap: 0.6rem;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: white;
     text-decoration: none;
     font-family: var(--heading-font);
 }
 
+/* Add this to style.css if you haven't already */
+/* --- WHITE NAVBAR STATE --- */
+/* This class will be toggled by JS */
+.nav-white {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+.nav-white .logo, 
+.nav-white .menu-link {
+    color: #fff !important;
+}
+
+/* Optional: If you have a button with a border, handle that too */
+.nav-white .talk-btn { 
+    border-color: #fff !important;
+    color: #fff !important;
+}
 
 .nav-header{
     position: fixed;
@@ -222,7 +262,7 @@ svg{
     z-index: 1000;
     transition: background 0.3s ease, color 0.3s ease;
     border-radius: 100px;
-    border: 1px solid #0a0a0a;
+    border: 1px solid #ffffff;
 }
 
 .navigation{
@@ -243,7 +283,7 @@ svg{
 }
 
 .nav-link {
-    color: var(--text-color);
+    color: white;
     text-decoration: none;
     font-weight: 500;
     position: relative;
@@ -258,10 +298,12 @@ svg{
     left: 0;
     background-color: currentColor;
     transition: width 0.3s ease;
+    color: #f9ff82;
 }
 
 .nav-link:hover::after {
     width: 100%;
+    color: #f9ff82;
 }
 
 @media (max-width: 768px) {
@@ -282,11 +324,12 @@ svg{
     display: flex;
     align-items: center;
     padding-left: 5rem;
+    padding-top: 5rem;
 }
 
 .hero-title{
     font-size: 1.5rem;
-    color: var(--primary-color);
+    color: white;
     margin-bottom: 1rem;
     font-weight: normal;
 }
@@ -308,6 +351,7 @@ svg{
     text-decoration: none;
     font-weight: 600;
     font-size: 1.5rem;
+    border: 1px solid #ffffff98;
     position: relative; /* Needed for positioning the icon */
     transition: background-color 0.3s ease; /* Keep this for the color change */
     /* --- Add these new properties --- */
@@ -334,53 +378,50 @@ svg{
 
 /*ABOUT STARTS HERE*/
 .about-section {
-  min-height: 200vh;
-  display: flex;
-  align-items: center;
-  padding: 5rem;
-  gap: 3rem;
-  background: #0a0a0a;
-  position: relative;
-  overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0; /* Remove padding so pin works better */
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
 }
 
-/*yellow layer*/
+/* The Yellow Overlay */
 .about-transition {
-  position: absolute;
-  inset: 0;
-  background: #f9ff82;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 5;
-  overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f9ff82; /* Yellow */
+    z-index: 20; /* High z-index to cover text initially */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-.shape{
-  width: 80px;
-  height: 80px;
-  background: #000;
-  position: absolute;
-  top: 55%;              /* was implicitly 50% */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
+/* The Shape Itself */
+.shape {
+    width: 100px;
+    height: 100px;
+    background: #0a0a0a; /* Black shape on Yellow bg */
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* CSS Center */
+    z-index: 21; /* Above the yellow layer */
 }
 
-
-/* ABOUT SECTION BASE */
-.about-section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 5rem;
-  gap: 3rem;
-  background: #0a0a0a;
-  position: relative;
-  overflow: hidden;
-  color: #f9ff82; /* default text color */
+/* The Text Content */
+.about-container {
+    position: relative;
+    z-index: 10; /* Initially below the yellow layer */
+    width: 100%;
+    padding: 5rem; /* Add padding here instead */
 }
 
 /* About title */
@@ -391,9 +432,13 @@ svg{
   color: #f9ff82;
   font-weight: bold;
   text-align: center;
+  opacity: 0;
+    transform: translateY(50px); /* Push them down slightly */
+    will-change: transform, opacity;
 }
 
 .about-para{
+    color: #f9ff82;
     font-size: 1.75rem;
     text-align: justify;
     line-height: 1.5em;
@@ -403,6 +448,9 @@ svg{
     text-transform: uppercase;
     max-width: 800px;
     margin: 0 auto;
+    opacity: 0;
+    transform: translateY(50px); /* Push them down slightly */
+    will-change: transform, opacity;
 }
 
 .about-para p{
@@ -424,16 +472,15 @@ img{
     object-fit: cover;
 }
 
-.about-container{
-    position: relative;
-    width: 100%;
-}
-
 .about-hero{
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the "About Me" text vertically */
     overflow: hidden;
 }
 
@@ -443,29 +490,79 @@ img{
     margin: 0 auto;
 }
 
-.marquee{
-    position: absolute;
-    left: 0;
-    bottom: -8rem;
+/* --- NEW PROJECTS SECTION --- */
+.projects-section {
+    position: relative;
     width: 100%;
-    height: 7.5rem;
-    overflow: hidden;
+    background: #0a0a0a;
+    color: #f9ff82;
+    padding: 10vh 5vw;
+    z-index: 10; /* Ensure it's above background elements */
+}
+
+.project-list {
     display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.project-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    overflow: hidden; /* Essential for the height animation */
+    transition: background 0.3s ease;
+}
+
+.project-item:hover {
+    background: rgba(255, 255, 255, 0.05); /* Subtle highlight on hover */
+    color: white;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 2rem 0;
 }
 
-.marquee-track{
-    display: flex;
-    gap: 0.75rem;
-    will-change: transform;
-    width: max-content;
+.project-header h2 {
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+    transition: transform 0.4s ease;
 }
 
-.marquee-items{
-    width: 10rem;
-    height: 6rem;
-    border-radius: 0.25rem;
+.project-header p {
+    font-size: 1rem;
+    opacity: 0.6;
+    padding-right: 10px;
+}
+
+/* Initially Hidden Content Area */
+.project-content {
+    height: 0;
     overflow: hidden;
+    will-change: height;
+}
+
+.project-image-wrapper {
+    width: 100%;
+    height: 400px; /* Adjust based on your preference */
+    overflow: hidden; /* Masks the image as it slides in */
+    margin-bottom: 2rem;
+    border-radius: 8px;
+}
+
+.project-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale();
+    
+    /* PREPARE ANIMATION STATE */
+    transform: translateY(-100%); /* Start hidden ABOVE the view */
+    will-change: transform;
 }
 
 @media(max-width:1000px){

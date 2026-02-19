@@ -105,7 +105,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadNavbar();
 
+  // ---------------- WAVE ANIMATION ----------------
+  // ---------------- 3D FLUX ANIMATION ----------------
+  const fluxContainer = document.querySelector(".flux-container");
 
+  if (fluxContainer) {
+      // 1. Animate the "Far" layer (Slowest, Deepest)
+      gsap.to(".layer-far", {
+          x: -400, // Move left
+          duration: 20,
+          repeat: -1,
+          ease: "none",
+          yoyo: true // Moves back and forth gently
+      });
+      
+      // Animate the wave height (breathing)
+      gsap.to(".layer-far", {
+          attr: { d: "M-200,350 C100,150 400,550 700,350 C1000,150 1300,550 1600,350 C1900,150 2200,550 2500,350" },
+          duration: 6,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+      });
+
+      // 2. Animate the "Mid" layer
+      gsap.to(".layer-mid", {
+          x: -600,
+          duration: 15,
+          repeat: -1,
+          ease: "none",
+          yoyo: true
+      });
+
+      // 3. Animate the "Close" layer (Fastest, Front)
+      gsap.to(".layer-close", {
+          x: -800,
+          duration: 10,
+          repeat: -1,
+          ease: "none",
+          yoyo: true
+      });
+
+      // Optional: Slight mouse interaction for 3D feel
+      window.addEventListener("mousemove", (e) => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 20;
+          const y = (e.clientY / window.innerHeight - 0.5) * 20;
+          
+          gsap.to(".flux-svg", {
+              x: x,
+              y: y,
+              duration: 1,
+              ease: "power2.out"
+          });
+      });
+  }
+  if (document.querySelector(".wave-path")) {
+      gsap.fromTo(".wave-path", 
+          { scaleY: 0.8 }, 
+          {
+              scaleY: 1.2,
+              transformOrigin: "50% 50%", // Scale from center
+              duration: 3,
+              stagger: 0.5, // Offset start times so they don't move together
+              yoyo: true,
+              repeat: -1,
+              ease: "sine.inOut"
+          }
+      );
+  }
 
   // ---------------- HERO A-Z RANDOM ANIMATION ----------------
   const heroSub = document.querySelector(".hero-subtitle");
@@ -130,64 +197,77 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ---------------- ABOUT SHAPE ANIMATION ----------------
+  // ---------------- ABOUT SHAPE & TEXT REVEAL ANIMATION ----------------
   const aboutSection = document.querySelector(".about-section");
   const shape = document.querySelector(".shape");
   const aboutTransition = document.querySelector(".about-transition");
 
+  // 1. Set initial states (just in case CSS didn't catch it)
+  gsap.set([".about-title", ".about-para"], { 
+      opacity: 0, 
+      y: 50 
+  });
+
   const aboutTL = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".about-section",
-      start: "top top",
-      end: "+=150%",
-      scrub: true,
-      pin: true,
-    },
+      scrollTrigger: {
+          trigger: ".about-section",
+          start: "top top",
+          // INCREASED DISTANCE: This keeps the section pinned longer
+          // giving time for the text to animate in before scrolling away.
+          end: "+=250%", 
+          scrub: 1,      // Added a slight number (1) for smoother smoothing
+          pin: true,
+      },
   });
 
   aboutTL
-    // square rises to center
-    .to(".shape", {
-      y: "-50vh",
-      rotate: 360,
-      ease: "power2.inOut",
-    })
-    // square → circle
-    .to(".shape", {
-      borderRadius: "50%",
-      duration: 0.6,
-      ease: "power2.inOut",
-    })
-    // circle → zoom to full screen
-    .to(".shape", {
-      scale: 40,
-      ease: "power4.inOut",
-      transformOrigin: "50% 50%",
-    })
-    // remove yellow so black is visible
-    .to(".about-transition", {
-      opacity: 0,
-      duration: 0.1,
-    });
+      // 1. Square rises to center
+      .to(".shape", {
+          y: "-50vh",
+          rotate: 360,
+          duration: 2,
+          ease: "power2.inOut",
+      })
+      // 2. Square → Circle
+      .to(".shape", {
+          borderRadius: "50%",
+          duration: 1,
+          ease: "power2.inOut",
+      })
+      // 3. Circle → Zoom to full screen
+      .to(".shape", {
+          scale: 50, // Ensure it covers corners
+          duration: 2,
+          ease: "power4.inOut",
+          transformOrigin: "50% 50%",
+      })
+      // 4. Fade out the yellow overlay
+      .to(".about-transition", {
+          opacity: 0,
+          duration: 1,
+          ease: "none",
+          pointerEvents: "none" // <--- ADD THIS LINE. It removes the "glass sheet"
+      })
+      // 5. REVEAL TITLE (While still pinned)
+      .to(".about-title", {
+          opacity: 1,
+          y: 0,
+          duration: 1.5,
+          ease: "power3.out"
+      }, "-=0.5") // Overlap slightly with overlay fade
+      // 6. REVEAL PARAGRAPH (While still pinned)
+      .to(".about-para", {
+          opacity: 1,
+          y: 0,
+          duration: 1.5,
+          ease: "power3.out"
+      }, "-=1") // Overlap with title
+      // 7. BUFFER (Optional)
+      // Add a small empty tween at the end to hold the final state 
+      // for a moment before the user scrolls past.
+      .to({}, { duration: 1 });
 
-
-
-  // ---------------- MARQUEE ----------------
-  const marqueeTrack = document.querySelector(".marquee-track");
-  const items = document.querySelectorAll(".marquee-items");
-
-  items.forEach(item => {
-    marqueeTrack.appendChild(item.cloneNode(true));
-  });
-
-  let pos = 0;
-
-  gsap.ticker.add(() => {
-    pos -= 0.5;
-    if (Math.abs(pos) >= marqueeTrack.scrollWidth / 5) pos = 0;
-    gsap.set(marqueeTrack, { x: pos });
-  });
-
+  
   //A to Z
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -232,6 +312,58 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  // ---------------- VERTICAL ACCORDION PROJECTS ----------------
+
+const items = document.querySelectorAll(".project-item");
+
+items.forEach((item) => {
+    const header = item.querySelector(".project-header");
+    const content = item.querySelector(".project-content");
+    const image = item.querySelector(".project-image-wrapper img");
+
+    // Create a GSAP timeline for each item, PAUSED initially
+    const tl = gsap.timeline({ paused: true });
+
+    tl.to(content, {
+        height: "auto", // Animate to natural height
+        duration: 0.5,
+        ease: "power2.out"
+    })
+    .to(image, {
+        y: "0%",       // Slide image down into view
+        duration: 0.6,
+        ease: "power3.out" // Gives it a nice "settle" feel
+    }, "<"); // Start at the same time as height animation
+
+    // --- MOUSE INTERACTIONS ---
+
+    item.addEventListener("mouseenter", () => {
+        // 1. Play the expand animation
+        tl.play();
+        
+        // 2. Optional: Slide the title slightly for a premium feel
+        gsap.to(header.querySelector("h2"), { x: 20, duration: 0.4 });
+        
+        // 3. Dim other items (Focus effect)
+        items.forEach(other => {
+            if (other !== item) gsap.to(other, { opacity: 0.3, duration: 0.4 });
+        });
+    });
+
+    item.addEventListener("mouseleave", () => {
+        // 1. Reverse the expand animation
+        tl.reverse();
+        
+        // 2. Reset title
+        gsap.to(header.querySelector("h2"), { x: 0, duration: 0.4 });
+        
+        // 3. Restore opacity of other items
+        items.forEach(other => {
+            gsap.to(other, { opacity: 1, duration: 0.4 });
+        });
+    });
+});
 
   //svg part
   let svg = document.querySelector("svg");

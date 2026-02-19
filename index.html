@@ -21,9 +21,26 @@
                 <div class="blob b4"></div>
             </div>
 
-            <div class="svg-container">
-                <svg width="1364" height="3007" viewBox="0 0 1364 3007" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M679.33 35.0095C679.33 35.0095 139.982 224.929 66.8304 521.51C-52.6641 1005.98 1400.33 1230.01 1321.83 761.51C1243.33 293.01 -36.687 946.031 66.8304 1506.51C161.697 2020.15 1183.63 1290.01 1321.83 1969.01C1435.73 2528.59 102.83 3031.51 36.8304 2515.01C-21.8857 2055.51 1321.83 2971.51 1321.83 2971.51" stroke="white" stroke-width="70" stroke-linecap="round"/>
+            <div class="flux-container">
+                <svg class="flux-svg" viewBox="0 0 1440 600" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="fluxGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#f9ff82; stop-opacity:0" />
+                            <stop offset="50%" style="stop-color:#f9ff82; stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#f9ff82; stop-opacity:0" />
+                        </linearGradient>
+                        <filter id="blurFar"><feGaussianBlur stdDeviation="4" /></filter>
+                        <filter id="blurMid"><feGaussianBlur stdDeviation="2" /></filter>
+                    </defs>
+
+                    <path class="flux-path layer-far" filter="url(#blurFar)" opacity="0.15" fill="none" stroke="url(#fluxGradient)" stroke-width="2"
+                        d="M-200,300 C100,100 400,500 700,300 C1000,100 1300,500 1600,300 C1900,100 2200,500 2500,300"></path>
+
+                    <path class="flux-path layer-mid" filter="url(#blurMid)" opacity="0.4" fill="none" stroke="url(#fluxGradient)" stroke-width="3"
+                        d="M-200,300 C100,500 400,100 700,300 C1000,500 1300,100 1600,300 C1900,500 2200,100 2500,300"></path>
+
+                    <path class="flux-path layer-close" opacity="1" fill="none" stroke="#f9ff82" stroke-width="4"
+                        d="M-200,300 C100,200 400,400 700,300 C1000,200 1300,400 1600,300 C1900,200 2200,400 2500,300"></path>
                 </svg>
             </div>
 
@@ -34,21 +51,22 @@
                     <p class="hero-subtitle">A passionate software developer
 specializing in web development
 and machine learning.</p>
-                    <button class="talkButton">Let's Talk<i class="fa-solid fa-arrow-right"></i></button>
+                    <a href="#about-heading">
+                        <button class="talkButton">Let's Talk<i class="fa-solid fa-arrow-right"></i></button>
+                    </a>
                 </div>
             </section>
 
             <!-- about -->
-            <section id="aboutPart" class="section about-section">
+            <section class="section about-section">
                 <div class="about-transition">
                     <div class="shape"></div>
                 </div>
 
-                
-
                 <div class="about-container">
                     <section class="about-hero">
-                        ><div class="about-texts">
+                        <!--about parts-->
+                        <div class="about-texts">
                             <h2 id="about-heading" class="about-title">ABOUT ME</h2>
                             <div class="about-para">
                                 <p class="aboutPara">I am a full-stack web developer building on a strong foundation in frontend engineering. I specialize in Next.js, TypeScript, and Tailwind CSS, creating responsive, maintainable interfaces with reusable components and smooth user experiences. I focus on clean layouts, visual hierarchy, and accessibility to deliver polished designs.</p>
@@ -57,16 +75,82 @@ and machine learning.</p>
                             </div>
                         </div>
 
-                        <div class="marquee">
-                            <div class="marquee-track">
-                                <div class="marquee-items"><img src="images/img1.jpg"/></div>
-                                <div class="marquee-items"><img src="images/img2.jpg"/></div>
-                                <div class="marquee-items"><img src="images/img3.jpg"/></div>
-                                <div class="marquee-items"><img src="images/img4.jpg"/></div>
-                                <div class="marquee-items"><img src="images/img5.jpg"/></div>
-                                <div class="marquee-items"><img src="images/img6.jpg"/></div>
+                        <section class="projects-section">
+                            <div class="project-list">
+                                
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <h2>INVENTORY APP</h2>
+                                        <p>Next.js / Typescript</p>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-image-wrapper">
+                                            <img src="./images/img1.jpg" alt="Inventory App">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <h2>UpSpring Prototype</h2>
+                                        <p>Figma</p>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-image-wrapper">
+                                            <img src="./images/img2.jpg" alt="UpSpring Prototype">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <h2>PORTFOLIO 2026</h2>
+                                        <p>HTML / CSS / Javascript / GSAP / Lenis</p>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-image-wrapper">
+                                            <img src="./images/img3.jpg" alt="Portfolio Project">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <h2>Sri-Maps Prototype</h2>
+                                        <p>Figma</p>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-image-wrapper">
+                                            <img src="./images/img6.jpg" alt="Sri Proto">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <h2>Sri-Maps Website</h2>
+                                        <p>HTML / CSS / Javascript</p>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-image-wrapper">
+                                            <img src="./images/img4.jpg" alt="Sri Maps Website">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <h2>Merchy Frontend</h2>
+                                        <p>HTML / CSS / Javascript / REACT / LENIS / GSAP</p>
+                                    </div>
+                                    <div class="project-content">
+                                        <div class="project-image-wrapper">
+                                            <img src="./images/img5.jpg" alt="Portfolio Project">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </section>
                     </section>
                 </div>
             </section>
